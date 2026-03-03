@@ -1,0 +1,55 @@
+
+
+cache hit time: 1 cycles
+cache miss time: 2 cycles
+threshold: 1 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 1 cycles
+threshold: 0 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 3 cycles
+threshold: 1 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 1 cycles
+threshold: 0 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 2 cycles
+threshold: 1 cycles
+
+
+cache hit time: 1 cycles
+cache miss time: 8 cycles
+threshold: 4 cycles
+
+
+cache hit time: 1 cycles
+cache miss time: 1 cycles
+threshold: 1 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 1 cycles
+threshold: 0 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 1 cycles
+threshold: 0 cycles
+
+
+cache hit time: 0 cycles
+cache miss time: 2 cycles
+threshold: 1 cycles
+
+
+cache hit time: 1 cycles
+cache miss time: 1 cycles
+threshold: 1 cycles
