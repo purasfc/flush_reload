@@ -31,16 +31,16 @@ int main(void) {
 
 	evict_target();
 	volatile uint8_t dummy = addr[0];
-	asm volatile("isb; dsb sy");
 	start = rdtsc(); 
+	asm volatile("isb; dsb sy");
 	dummy = addr[0];
 	asm volatile("isb; dsb sy");
 	end = rdtsc();
 	t_hit = end - start;
 
 	evict_target();
-	asm volatile("isb; dsb sy");
 	start = rdtsc();
+	asm volatile("isb; dsb sy");
 	dummy = addr[0];
 	asm volatile("isb; dsb sy");
 	end = rdtsc();
