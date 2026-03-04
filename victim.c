@@ -7,22 +7,25 @@
 it measures time
 victim access the shared memory after flushing the last level cache*/
 
-uint64_t rdtsc(void);
 
 int main() {
-	uint64_t start_time;
-	uint64_t end_time;
-	start_time = rdtsc();
-	for(int i=0; i < 1000; i++);
-	end_time = rdtsc();	
-	printf("time: %lu \n", start_time);
-	printf("end time:  %lu \n", end_time);
-	printf("gap:  %lu \n", end_time - start_time);
+	const char* file_path = "shared_target.bin";
+	int fd = open(file_path, O_RDONLY);
+
+	unsigned char *addr = mmap(NULL, 4096, PROT_READ, MAP_SHARED, fd, 0);
+
+	printf("victim ready. Shared memory mapped at %p\n", addr);
+	printf("press enter to access memory...\n");
+
+	while(1) {
+		getchar();
+		volatile uint8_t dummy = addr[0];
+
+		printf("memory accessed.\n");
+	}
+	
+	munmap(addr, 4096);
+	
 	return 0;
 }	
 
-uint64_t rdtsc(void) {
-	uint64_t val;
-	asm volatile("mrs %0, cntvct_el0" : "=r" (val));
-	return val;
-}

