@@ -12,6 +12,7 @@ uint64_t rdtsc(void) {
 void evict_target(void) {
 	uint8_t sum = 0;
 	for (int i=0; i<EVICT_SIZE; i++) {
-		sum += evict_buffer[i];
+		sum += ((volatile uint8_t*)evict_buffer)[i];
 	}
+	asm volatile("" :: "r"(sum));
 }

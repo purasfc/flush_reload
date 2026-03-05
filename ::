@@ -17,18 +17,15 @@ int main(void) {
 	uint64_t threshold = 4;
 	uint64_t diff = 0;
 	uint8_t volatile dummy;
-	int random_index = 0;
 	while(1) {
 		printf("before evict\n");
 		evict_target();
 		printf("evict finished\n");
 		int i = 0;
-		printf("before while\n");
-		while(i < 40096) {
+		while(i < 4096) {
 			i++;
-			asm volatile ("nop");
+			continue;
 		}
-		printf("after while\n");
 		asm volatile("isb");
 		asm volatile ("dsb sy");
 		start = rdtsc();
@@ -37,7 +34,6 @@ int main(void) {
 		asm volatile ("isb; dsb sy");
 		end = rdtsc();
 		diff = end - start;
-		random_index++;
 		
 		if (diff < threshold) {
 			printf("victim access detected. time: %li\n", diff);
